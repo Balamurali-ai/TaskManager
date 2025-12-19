@@ -1,4 +1,4 @@
-const API_BASE_URL = "/api/v1";
+const API_BASE_URL = "https://taskmanager-e4mf.onrender.com/api/v1";
 
 export const getTasks = async () => {
   try {
