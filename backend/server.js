@@ -51,5 +51,9 @@ const server = async () => {
     process.exit(1);
   }
 };
+app.get("/", (req, res) => {
+  res.send("Task Manager API is running 🚀");
+});
+
 
 server();
