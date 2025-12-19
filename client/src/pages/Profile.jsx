@@ -16,7 +16,7 @@ const Profile = () => {
 
   const fetchUserProfile = async () => {
     try {
-      const response = await fetch("http://localhost:8000/api/v1/user", {
+      const response = await fetch("https://taskmanager-e4mf.onrender.com/api/v1/user", {
         credentials: "include",
       });
       if (response.ok) {
@@ -33,7 +33,7 @@ const Profile = () => {
 
   const handleUpdateProfile = async (data) => {
     try {
-      const response = await fetch("http://localhost:8000/api/v1/user", {
+      const response = await fetch("https://taskmanager-e4mf.onrender.com/api/v1/user", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
