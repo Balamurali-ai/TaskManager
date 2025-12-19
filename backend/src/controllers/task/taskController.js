@@ -1,66 +1,58 @@
-import asyncHandler from "express-async-handler";
-import TaskModel from "../../models/task/TaskModel.js";
-
-export const createTask = asyncHandler(async (req, res) => {
-  try {
-    const { title, description, dueDate, priority, status, category, tags } = req.body;
-
-    if (!title || title.trim() === "") {
-      return res.status(400).json({ message: "Title is required" });
-    }
-
-    const task = new TaskModel({
-      title: title.trim(),
-      description: description ? description.trim() : '',
-      dueDate,
-      priority: priority || 'medium',
-      status: status || 'active',
-      category: category || 'General',
-      tags: Array.isArray(tags) ? tags.slice(0, 10) : [],
-      user: req.user._id
-    });
-    
-    await task.save();
-    res.status(201).json(task);
-  } catch (error) {
-    console.error("Error creating task:", error);
-    res.status(500).json({ message: "Failed to create task" });
-  }
+export const createTask = asyncHandler(async (req,res) =>{
+   try{
+    const {title,description,dueDate,priority,status,category,tags} = req.body;
+if(!title || title.trim() === ""){
+ return res.status(400).json({message:"Title is required"})
+}
+const task = new TaskModel({
+    title,
+    description,
+    dueDate,
+    priority,
+    status,
+    category,
+    tags,
+    user:req.user._id
 });
-export const getTasks = asyncHandler(async (req, res) => {
-  try {
-    const tasks = await TaskModel.find({ user: req.user._id });
-    res.status(200).json(tasks);
-  } catch (error) {
-    console.error("Error fetching tasks:", error);
-    res.status(500).json({ message: "Failed to fetch tasks" });
-  }
-});
+await task.save();
+res.status(201).json(task);
+   }
+   catch(error){
+    console.log("error in Create task",error);
+    res.status(500).json({message:"Internal Server Error"})
+   }
+})
+export const getTasks = asyncHandler(async (req,res) => {
+    try {
+        const tasks = await TaskModel.find({ user: req.user._id });
+        res.status(200).json(tasks);
+    } catch (error) {
+        console.log("Error in getTasks", error.message);
+        res.status(500).json({ message: error.message });
+    }
+})
 
-export const getTask = asyncHandler(async (req, res) => {
-  try {
-    const userId = req.user._id;
-    const { id } = req.params;
-    
-    if (!id) {
-      return res.status(400).json({ message: "Task ID is required" });
+export const getTask = asyncHandler(async (req,res) =>{
+    try{
+        const userId = req.user._id;
+        const {id} = req.params;
+        if(!id){
+            return res.status(400).json({message:"Task id is required"})
+        }
+        const task = await TaskModel.findById(id);
+        if(!task){
+            return res.status(404).json({message:"Task not found"})
+        }
+        if(!task.user.equals(userId)){
+            return res.status(403).json({message:"You are not authorized to view this task"})
+        }
+        res.status(200).json(task);
     }
-    
-    const task = await TaskModel.findById(id);
-    if (!task) {
-      return res.status(404).json({ message: "Task not found" });
+    catch(error){
+        console.log("Error in getTask", error.message);
+        res.status(500).json({ message: error.message });
     }
-    
-    if (!task.user.equals(userId)) {
-      return res.status(403).json({ message: "Unauthorized access" });
-    }
-    
-    res.status(200).json(task);
-  } catch (error) {
-    console.error("Error fetching task:", error);
-    res.status(500).json({ message: "Failed to fetch task" });
-  }
-});
+})
 export const updateTask = asyncHandler(async (req, res) => {
   try {
     const userId = req.user._id;
@@ -97,28 +89,25 @@ export const updateTask = asyncHandler(async (req, res) => {
     res.status(500).json({ message: "Failed to update task" });
   }
 });
-export const deleteTask = asyncHandler(async (req, res) => {
-  try {
-    const userId = req.user._id;
-    const { id } = req.params;
-    
-    if (!id) {
-      return res.status(400).json({ message: "Task ID is required" });
+export const deleteTask = asyncHandler(async (req, res) =>{
+    try{
+        const userId = req.user._id;
+        const {id} = req.params;
+        if(!id){
+            return res.status(400).json({message:"Task id is required"})
+        }
+        const task = await TaskModel.findById(id);
+        if(!task){
+            return res.status(404).json({message:"Task not found"})
+        }
+        if(!task.user.equals(userId)){
+            return res.status(403).json({message:"You are not authorized to delete this task"})
+        }
+        await TaskModel.findByIdAndDelete(id);
+        res.status(200).json({message:"Task deleted successfully",task});
     }
-    
-    const task = await TaskModel.findById(id);
-    if (!task) {
-      return res.status(404).json({ message: "Task not found" });
+    catch(error){
+        console.log("Error in deleteTask", error.message);
+        res.status(500).json({ message: error.message });
     }
-    
-    if (!task.user.equals(userId)) {
-      return res.status(403).json({ message: "Unauthorized access" });
-    }
-    
-    await TaskModel.findByIdAndDelete(id);
-    res.status(200).json({ message: "Task deleted successfully", task });
-  } catch (error) {
-    console.error("Error deleting task:", error);
-    res.status(500).json({ message: "Failed to delete task" });
-  }
-});
+})
