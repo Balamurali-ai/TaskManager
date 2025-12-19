@@ -23,11 +23,11 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+      <div className="max-w-md w-full bg-white p-6 sm:p-8 rounded-lg shadow-md">
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-teal-600 mb-2">TaskManager Pro</h1>
-          <h2 className="text-xl font-semibold text-gray-800">Welcome Back</h2>
+          <h1 className="text-xl sm:text-2xl font-bold text-teal-600 mb-2">TaskManager Pro</h1>
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-800">Welcome Back</h2>
           <p className="text-gray-600 mt-2">Sign in to your account</p>
         </div>
 

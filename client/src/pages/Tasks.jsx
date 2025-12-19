@@ -146,38 +146,38 @@ const Tasks = () => {
   return (
     <div className="space-y-6">
     
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">Tasks</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-800">Tasks</h1>
           <p className="text-gray-600 mt-1">Manage all your tasks</p>
-          <div className="text-xs text-gray-500 mt-2">
+          <div className="hidden sm:block text-xs text-gray-500 mt-2">
             <span className="mr-4">Ctrl+N: New Task</span>
             <span className="mr-4">Ctrl+A: Select All</span>
             <span className="mr-4">Ctrl+E: Export</span>
             <span>Esc: Cancel/Clear</span>
           </div>
         </div>
-        <div className="flex items-center space-x-3">
-          <div className="relative group">
-            <button className="border border-gray-300 px-3 py-2 rounded-lg hover:bg-gray-50 text-sm font-medium">
-              Export ▼
-            </button>
-            <div className="absolute right-0 mt-1 w-32 bg-white border border-gray-300 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10">
-              <button
-                onClick={() => exportTasksToCSV(tasks)}
-                className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              >
-                Export CSV
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
+          <div className="flex gap-2">
+            <div className="relative group">
+              <button className="border border-gray-300 px-3 py-2 rounded-lg hover:bg-gray-50 text-sm font-medium w-full sm:w-auto">
+                Export ▼
               </button>
-              <button
-                onClick={() => exportTasksToJSON(tasks)}
-                className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              >
-                Export JSON
-              </button>
+              <div className="absolute right-0 mt-1 w-32 bg-white border border-gray-300 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10">
+                <button
+                  onClick={() => exportTasksToCSV(tasks)}
+                  className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                >
+                  Export CSV
+                </button>
+                <button
+                  onClick={() => exportTasksToJSON(tasks)}
+                  className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                >
+                  Export JSON
+                </button>
+              </div>
             </div>
-          </div>
-          <div className="relative">
             <select
               value={`${sortBy}-${sortOrder}`}
               onChange={(e) => {
@@ -185,7 +185,7 @@ const Tasks = () => {
                 setSortBy(field);
                 setSortOrder(order);
               }}
-              className="border border-gray-300 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm"
+              className="border border-gray-300 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm flex-1 sm:flex-none"
             >
               <option value="createdAt-desc">Newest First</option>
               <option value="createdAt-asc">Oldest First</option>
@@ -199,15 +199,15 @@ const Tasks = () => {
           </div>
           <button
             onClick={() => setShowAddForm(true)}
-            className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+            className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg font-medium transition-colors w-full sm:w-auto"
           >
             + Add New Task
           </button>
         </div>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-4">
-        <div className="flex-1">
+      <div className="space-y-4">
+        <div className="w-full">
           <input
             type="text"
             placeholder="Search tasks..."
@@ -216,13 +216,13 @@ const Tasks = () => {
             className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
           />
         </div>
-        <div className="flex flex-col gap-3">
+        <div className="space-y-3">
           <div className="flex flex-wrap gap-2">
             {filterOptions.map((option) => (
               <button
                 key={option.value}
                 onClick={() => setFilter(option.value)}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                className={`px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors text-sm ${
                   filter === option.value
                     ? "bg-teal-600 text-white"
                     : "bg-white text-gray-600 border border-gray-300 hover:bg-gray-50"
@@ -237,7 +237,7 @@ const Tasks = () => {
               <button
                 key={option.value}
                 onClick={() => setCategoryFilter(option.value)}
-                className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                className={`px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium transition-colors ${
                   categoryFilter === option.value
                     ? "bg-blue-600 text-white"
                     : "bg-white text-blue-600 border border-blue-300 hover:bg-blue-50"
@@ -274,7 +274,7 @@ const Tasks = () => {
  
       {showAddForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg w-full max-w-md">
+          <div className="bg-white rounded-lg w-full max-w-md max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between p-6 border-b">
               <h3 className="text-lg font-semibold text-gray-800">Add New Task</h3>
               <button
