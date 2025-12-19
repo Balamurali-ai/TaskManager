@@ -97,6 +97,7 @@ const Tasks = () => {
   ];
 
   const [categoryFilter, setCategoryFilter] = useState("all");
+  const [showExportMenu, setShowExportMenu] = useState(false);
 
   const handleTaskSelect = (taskId) => {
     setSelectedTasks(prev => 
@@ -159,24 +160,41 @@ const Tasks = () => {
         </div>
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
           <div className="flex gap-2">
-            <div className="relative group">
-              <button className="border border-gray-300 px-3 py-2 rounded-lg hover:bg-gray-50 text-sm font-medium w-full sm:w-auto">
+            <div className="relative">
+              <button 
+                onClick={() => setShowExportMenu(!showExportMenu)}
+                className="border border-gray-300 px-3 py-2 rounded-lg hover:bg-gray-50 text-sm font-medium w-full sm:w-auto flex items-center justify-center gap-1"
+              >
                 Export ▼
               </button>
-              <div className="absolute right-0 mt-1 w-32 bg-white border border-gray-300 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10">
-                <button
-                  onClick={() => exportTasksToCSV(tasks)}
-                  className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  Export CSV
-                </button>
-                <button
-                  onClick={() => exportTasksToJSON(tasks)}
-                  className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  Export JSON
-                </button>
-              </div>
+              {showExportMenu && (
+                <>
+                  <div 
+                    className="fixed inset-0 z-10" 
+                    onClick={() => setShowExportMenu(false)}
+                  />
+                  <div className="absolute right-0 mt-1 w-32 bg-white border border-gray-300 rounded-lg shadow-lg z-20">
+                    <button
+                      onClick={() => {
+                        exportTasksToCSV(tasks);
+                        setShowExportMenu(false);
+                      }}
+                      className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-t-lg"
+                    >
+                      Export CSV
+                    </button>
+                    <button
+                      onClick={() => {
+                        exportTasksToJSON(tasks);
+                        setShowExportMenu(false);
+                      }}
+                      className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-b-lg"
+                    >
+                      Export JSON
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
             <select
               value={`${sortBy}-${sortOrder}`}
